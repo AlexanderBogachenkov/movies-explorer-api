@@ -8,8 +8,8 @@ const movieRoute = require("./movies");
 const NotFoundError = require("../utils/NotFoundError");
 
 // Роутеры без авторизации - SIGNUP and SIGNIN
-router.post("/signin", signupValidator, login);
-router.post("/signup", signinValidator, createUser);
+router.post("/signin", signinValidator, login);
+router.post("/signup", signupValidator, createUser);
 
 // Роутеры с авторзацией
 router.use("/users", auth, userRoute);
