@@ -17,6 +17,8 @@ npm run dev — запускает сервер с hot-reload
 
 ## Адрес репозитория:
 
+https://github.com/AlexanderBogachenkov/movies-explorer-api/
+
 ## Ссылки на проект:
 
 IP 62.84.119.178
