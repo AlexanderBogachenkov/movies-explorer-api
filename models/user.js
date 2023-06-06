@@ -4,6 +4,12 @@ const isEmail = require("validator/lib/isEmail");
 // const isUrl = require("validator/lib/isURL");
 const UnauthorizedError = require("../utils/UnauthorizedError");
 
+// ИМПОРТ ОШИБОК
+const {
+  WRONG_EMAIL_OR_PASSWORD,
+
+} = require("../utils/errors");
+
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -17,7 +23,6 @@ const userSchema = new mongoose.Schema(
         30,
         "длина имени пользователя должна быть не более 30 символов",
       ],
-      // default: "Жак-Ив Кусто",
     },
     email: {
       type: String,
@@ -31,27 +36,25 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "не передан пароль пользователя"],
-      // minlength: 8,
       select: false,
     },
   },
   { versionKey: false }, // отключаем поле "__v"
 );
 
-// eslint-disable-next-line func-names
-userSchema.statics.findUserByCredentials = function (email, password) {
+userSchema.statics.findUserByCredentials = function _(email, password) {
   // попытаемся найти пользователя по почте
   return this.findOne({ email }).select("+password") // this — это модель User
     .then((user) => {
       // если такого юзера нет — отклоняем промис
       if (!user) {
-        return Promise.reject(new UnauthorizedError("Неправильные почта или пароль"));
+        return Promise.reject(new UnauthorizedError(WRONG_EMAIL_OR_PASSWORD));
       }
       // юзер есть — сравниваем хеши
       return bcrypt.compare(password, user.password)
         .then((matched) => {
           if (!matched) {
-            return Promise.reject(new UnauthorizedError("Неправильные почта или пароль"));
+            return Promise.reject(new UnauthorizedError(WRONG_EMAIL_OR_PASSWORD));
           }
           return user; // теперь юзер доступен
         });

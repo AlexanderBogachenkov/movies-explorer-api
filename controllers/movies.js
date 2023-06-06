@@ -9,6 +9,14 @@ const ForbiddenError = require("../utils/ForbiddenError");
 const Movie = require("../models/movie");
 const { CREATED_CODE } = require("../utils/constants");
 
+// ИМПОРТ ОШИБОК
+const {
+  MOVIE_CREATION_DATA_IS_NOT_CORRECT,
+  MOVIE_IS_NOT_YOURS,
+  MOVIE_ID_NOT_FOUND,
+
+} = require("../utils/errors");
+
 // Создаем фильм
 const createMovie = (req, res, next) => {
   const {
@@ -48,7 +56,7 @@ const createMovie = (req, res, next) => {
         const errorMessage = Object.values(error.errors)
           .map((err) => err.message)
           .join(", ");
-        next(new BadRequestError(`Переданы некоректные даныые ${errorMessage}`));
+        next(new BadRequestError(`${MOVIE_CREATION_DATA_IS_NOT_CORRECT} ${errorMessage}`));
       } else {
         next(error);
       }
@@ -84,15 +92,15 @@ const deleteMovieById = (req, res, next) => {
             next();
           });
       } else {
-        next(new ForbiddenError("Вы пытаетесь удалить чужой фильм"));
+        next(new ForbiddenError(MOVIE_IS_NOT_YOURS));
       }
     } else {
-      next(new NotFoundError("Фильм с таким идентификатором не найден"));
+      next(new NotFoundError(MOVIE_ID_NOT_FOUND));
     }
   })
     .catch((error) => {
       if (error.name === "CastError") {
-        next(new BadRequestError("Фильм с таким идентификатором не найден"));
+        next(new BadRequestError(MOVIE_ID_NOT_FOUND));
       } else {
         next(error);
       }

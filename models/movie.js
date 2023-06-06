@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const isUrl = require("validator/lib/isURL");
 
-// eslint-disable-next-line function-paren-newline
 const movieSchema = new mongoose.Schema({
   country: {
     type: String,
@@ -63,7 +62,7 @@ const movieSchema = new mongoose.Schema({
   },
   movieId: {
     type: Number,
-    required: [true, "не указано id фильма, который содержится в ответе сервиса MoviesExplorer"],
+    required: [true, "не указано id фильма, который содержится в ответе сервиса"],
   },
   nameRU: {
     type: String,
